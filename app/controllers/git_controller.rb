@@ -10,6 +10,19 @@ class GitController < ApplicationController
     init_git_objects
   end
 
+  def info_refs
+    render text: "#{@commit_hash}\trefs/heads/master\n"
+  end
+
+  def head
+    render text: "ref: refs/heads/master\n"
+  end
+
+  def objects
+    hash = params['hash'][0..1] + params['hash'][3..-1]
+    send_data @object_storage[hash],:type => 'text/plain', :encoding => 'UTF-8'
+  end
+
   private
 
   def init_git_objects
